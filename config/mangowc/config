@@ -1,0 +1,65 @@
+gaps_in = 6
+gaps_out = 12
+border_size = 2
+corner_radius = 12
+
+active_border_color = 0xffcbc4cb
+inactive_border_color = 0xff363435
+
+blur = true
+blur_size = 8
+blur_passes = 3
+shadows = true
+shadow_range = 15
+shadow_render_power = 3
+shadow_color = 0x80000000
+
+layout = scroller
+master_factor = 0.55
+
+# Apps
+bind = SUPER, Return, exec, kitty
+bind = SUPER, B, exec, zen-browser
+bind = SUPER, E, exec, thunar
+bind = SUPER, D, exec, quickshell
+
+# Window Management
+bind = SUPER, Q, killactive,
+bind = SUPER, Shift, Space, togglefloating,
+bind = SUPER, F, fullscreen,
+
+# Focus Navigation
+bind = SUPER, H, movefocus, l
+bind = SUPER, L, movefocus, r
+bind = SUPER, K, movefocus, u
+bind = SUPER, J, movefocus, d
+
+# Tag Switching (1-9)
+bind = SUPER, 1, workspace, 1
+bind = SUPER, 2, workspace, 2
+bind = SUPER, 3, workspace, 3
+bind = SUPER, 4, workspace, 4
+bind = SUPER, 5, workspace, 5
+bind = SUPER, 6, workspace, 6
+bind = SUPER, 7, workspace, 7
+bind = SUPER, 8, workspace, 8
+bind = SUPER, 9, workspace, 9
+
+# Move Window to Tag (1-9)
+bind = SUPER Shift, 1, movetoworkspace, 1
+bind = SUPER Shift, 2, movetoworkspace, 2
+bind = SUPER Shift, 3, movetoworkspace, 3
+bind = SUPER Shift, 4, movetoworkspace, 4
+bind = SUPER Shift, 5, movetoworkspace, 5
+bind = SUPER Shift, 6, movetoworkspace, 6
+bind = SUPER Shift, 7, movetoworkspace, 7
+bind = SUPER Shift, 8, movetoworkspace, 8
+bind = SUPER Shift, 9, movetoworkspace, 9
+
+# Media Keys
+bind = , XF86AudioRaiseVolume, exec, pamixer -i 5
+bind = , XF86AudioLowerVolume, exec, pamixer -d 5
+bind = , XF86AudioMute, exec, pamixer -t
+bind = , XF86MonBrightnessUp, exec, brightnessctl set +5%
+bind = , XF86MonBrightnessDown, exec, brightnessctl set 5%-
+

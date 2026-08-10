@@ -1,0 +1,70 @@
+format = """
+[](fg:#3a3939)\
+$os\
+$username\
+[](bg:#49464a fg:#3a3939)\
+$directory\
+[](fg:#49464a bg:#615d63)\
+$git_branch\
+$git_status\
+[](fg:#615d63 bg:#948f94)\
+$nodejs\
+$rust\
+$python\
+$nix_shell\
+[](fg:#948f94)\
+$line_break\
+$character"""
+
+[os]
+disabled = false
+style = "bg:#3a3939 fg:#cbc4cb"
+
+[os.symbols]
+NixOS = "󱄅 "
+
+[username]
+show_always = true
+style_user = "bg:#3a3939 fg:#cbc4cb"
+style_root = "bg:#3a3939 fg:#f2b8b5"
+format = '[$user ]($style)'
+
+[directory]
+style = "bg:#49464a fg:#e6e1e1"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = ""
+style = "bg:#615d63 fg:#e6e1e1"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:#615d63 fg:#e6e1e1"
+format = '[$all_status$ahead_behind ]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:#948f94 fg:#141313"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = ""
+style = "bg:#948f94 fg:#141313"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = ""
+style = "bg:#948f94 fg:#141313"
+format = '[ $symbol ($version) ]($style)'
+
+[nix_shell]
+symbol = "󱄅"
+style = "bg:#948f94 fg:#141313"
+format = '[ $symbol $state ]($style)'
+
+[character]
+success_symbol = '[❯](bold fg:#cbc4cb)'
+error_symbol = '[❯](bold fg:#f2b8b5)'
+

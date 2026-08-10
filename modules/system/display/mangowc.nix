@@ -1,0 +1,22 @@
+{
+  pkgs,
+  inputs,
+  ...
+}: {
+  environment.systemPackages = [
+    inputs.mangowc.packages.${pkgs.system}.mangowc
+  ];
+
+  programs.xwayland.enable = true;
+
+  # Desktop session entry for SDDM display manager
+  environment.etc."wayland-sessions/mangowc.desktop".text = ''
+    [Desktop Entry]
+    Name=MangoWC
+    Comment=MangoWC Wayland Compositor
+    Exec=mangowc
+    Type=Application
+    DesktopNames=MangoWC
+  '';
+}
+

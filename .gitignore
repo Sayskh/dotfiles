@@ -1,0 +1,19 @@
+# Agents / Skills
+.agents/
+
+# NixOS generated
+result
+result-*
+
+# Secrets (if any)
+secrets/
+*.age
+
+# Editor
+.direnv/
+.envrc
+
+# OS
+.DS_Store
+Thumbs.db
+
