@@ -36,7 +36,7 @@
     };
 
     # WirePlumber Bluetooth Hi-Res Codecs (LDAC, AptX HD, AAC, SBC-XQ)
-    extraConfig.wireplumber = {
+    wireplumber.extraConfig = {
       "99-bluetooth-codecs" = {
         "wireplumber.settings" = {
           "bluetooth.codecs" = ["ldac" "aptx_hd" "aac" "sbc_xq"];
@@ -45,5 +45,6 @@
     };
   };
 }
+
 
 
