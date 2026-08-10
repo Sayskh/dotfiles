@@ -15,8 +15,9 @@
 
     mangowc = {
       url = "github:DreamMaoMao/mangowc";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+
 
     quickshell = {
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
