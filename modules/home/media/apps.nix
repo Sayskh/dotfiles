@@ -9,10 +9,11 @@
     mpv
     cava
     rmpc
-    mpc-cli
+    mpc
     playerctl
     grim
     slurp
+
   ];
 }
 
