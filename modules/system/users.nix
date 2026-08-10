@@ -25,12 +25,13 @@
     XDG_SESSION_TYPE = "wayland";
     NIXOS_OZONE_WL = "1";
 
-    # NVIDIA Wayland (Uncomment when moving to real hardware)
-    # GBM_BACKEND = "nvidia-drm";
-    # __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    # LIBVA_DRIVER_NAME = "nvidia";
-    # WLR_NO_HARDWARE_CURSORS = "1";
+    # NVIDIA Wayland environment variables
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    LIBVA_DRIVER_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1";
   };
 }
+
 
 
