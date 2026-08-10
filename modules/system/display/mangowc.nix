@@ -4,8 +4,9 @@
   ...
 }: {
   environment.systemPackages = [
-    inputs.mangowc.packages.${pkgs.system}.mangowc
+    inputs.mangowc.packages.${pkgs.system}.default
   ];
+
 
   programs.xwayland.enable = true;
 

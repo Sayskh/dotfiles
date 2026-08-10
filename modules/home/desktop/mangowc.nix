@@ -4,8 +4,9 @@
   ...
 }: {
   home.packages = [
-    inputs.mangowc.packages.${pkgs.system}.mangowc
+    inputs.mangowc.packages.${pkgs.system}.default
   ];
+
 
   home.file.".config/mangowc/autostart.sh" = {
     executable = true;
