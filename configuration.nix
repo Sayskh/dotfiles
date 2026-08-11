@@ -18,6 +18,9 @@
     ./modules/system/users.nix
   ];
 
+  # Hardware GPU profile: "nvidia" | "amd" | "intel" | "virtualbox" | "generic"
+  hardwareProfile = "nvidia";
+
   nixpkgs.config.allowUnfree = true;
 
   # State version for NixOS stateful data backwards compatibility
