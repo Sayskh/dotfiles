@@ -8,8 +8,7 @@
     enable32Bit = true;
   };
 
-  # Support both NVIDIA hardware and VirtualBox guest fallback
-  services.xserver.videoDrivers = ["nvidia" "modesetting"];
+  services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -20,7 +19,4 @@
     powerManagement.enable = false;
     powerManagement.finegrained = false;
   };
-
-  # Guest additions for VirtualBox testing
-  virtualisation.virtualbox.guest.enable = true;
 }
