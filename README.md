@@ -28,7 +28,7 @@ A NixOS desktop built on **MangoWC + Quickshell (Material Design 3)** — fully 
 | Editor | Neovim (lazy.nvim) |
 | Shell Prompt | Zsh + Oh My Zsh + Starship |
 | File Manager | Yazi + Thunar |
-| GPU Driver | Auto-Detect (`hardwareProfile = "auto"`) — NVIDIA / AMD / Intel / VirtualBox |
+| GPU Driver | NVIDIA Proprietary + Wayland modesetting |
 | Audio | PipeWire (Dynamic sample rate 44.1kHz-384kHz, EasyEffects DSP) |
 | Music | MPD + rmpc / Spotify |
 | Browsers | Zen Browser (default) + Brave |
@@ -91,7 +91,7 @@ dotfiles/
 │   │
 │   └── system/                         NixOS system modules
 │       ├── boot/                       Plymouth + CachyOS kernel
-│       ├── hardware/                   GPU auto-detection & Bluetooth
+│       ├── hardware/                   NVIDIA proprietary GPU & Bluetooth
 │       ├── display/                    MangoWC compositor + SDDM Astronaut
 │       ├── networking/                 NetworkManager + DNS-over-TLS
 │       ├── services/                   PipeWire audiophile + MPD
@@ -125,8 +125,6 @@ cd ~/.config/dotfiles
 # 2. Rebuild system and switch to flake
 sudo nixos-rebuild switch --flake .#nixbtw
 ```
-
-> **Note**: GPU & hypervisor detection is set to `hardwareProfile = "auto"` by default, which automatically configures NVIDIA, AMD, Intel GPUs, or VirtualBox guest environments out-of-the-box.
 
 ---
 

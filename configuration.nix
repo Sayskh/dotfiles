@@ -18,8 +18,6 @@
     ./modules/system/users.nix
   ];
 
-  hardwareProfile = "auto";
-
   nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "25.11";
