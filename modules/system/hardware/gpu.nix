@@ -5,23 +5,37 @@
   ...
 }: let
   cfg = config.hardwareProfile;
+  isAuto = cfg == "auto";
 in {
   options.hardwareProfile = lib.mkOption {
-    type = lib.types.enum ["nvidia" "amd" "intel" "virtualbox" "generic"];
-    default = "nvidia";
-    description = "Hardware GPU profile for driver and environment configuration";
+    type = lib.types.enum ["auto" "nvidia" "amd" "intel" "virtualbox" "generic"];
+    default = "auto";
+    description = "Hardware GPU profile: 'auto' detects NVIDIA, AMD, Intel, or VirtualBox automatically";
   };
 
   config = {
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
+
+      # Extra acceleration packages (safe for Intel/AMD/NVIDIA)
+      extraPackages = lib.mkIf (isAuto || cfg == "intel") (with pkgs; [
+        intel-media-driver
+        vpl-gpu-rt
+      ]);
     };
 
-    # ── NVIDIA Profile ──
-    services.xserver.videoDrivers = lib.mkIf (cfg == "nvidia") ["nvidia"];
+    # ── Driver Selection ──
+    services.xserver.videoDrivers =
+      if (isAuto) then
+        ["nvidia" "modesetting"]
+      else if (cfg == "nvidia") then
+        ["nvidia"]
+      else
+        ["modesetting"];
 
-    hardware.nvidia = lib.mkIf (cfg == "nvidia") {
+    # ── NVIDIA Settings (Active for auto or nvidia) ──
+    hardware.nvidia = lib.mkIf (isAuto || cfg == "nvidia") {
       modesetting.enable = true;
       open = false;
       nvidiaSettings = true;
@@ -31,16 +45,10 @@ in {
       powerManagement.finegrained = false;
     };
 
-    # ── AMD Profile ──
+    # ── AMD Kernel Module ──
     boot.initrd.kernelModules = lib.mkIf (cfg == "amd") ["amdgpu"];
 
-    # ── Intel Profile ──
-    hardware.graphics.extraPackages = lib.mkIf (cfg == "intel") (with pkgs; [
-      intel-media-driver
-      vpl-gpu-rt
-    ]);
-
-    # ── VirtualBox Profile ──
-    virtualisation.virtualbox.guest.enable = lib.mkIf (cfg == "virtualbox") true;
+    # ── VirtualBox Guest Service (Auto-detects hypervisor) ──
+    virtualisation.virtualbox.guest.enable = lib.mkIf (isAuto || cfg == "virtualbox") true;
   };
 }

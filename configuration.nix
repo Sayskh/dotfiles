@@ -18,8 +18,8 @@
     ./modules/system/users.nix
   ];
 
-  # Hardware GPU profile: "nvidia" | "amd" | "intel" | "virtualbox" | "generic"
-  hardwareProfile = "nvidia";
+  # Hardware GPU profile: "auto" (default) | "nvidia" | "amd" | "intel" | "virtualbox" | "generic"
+  hardwareProfile = "auto";
 
   nixpkgs.config.allowUnfree = true;
 
