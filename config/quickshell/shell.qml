@@ -16,6 +16,8 @@ import "modules/overview"
 import "modules/osd"
 import "modules/notifications"
 import "modules/cheatsheet"
+import "modules/sessionScreen"
+import "modules/settings"
 import "services"
 
 ShellRoot {
@@ -33,4 +35,6 @@ ShellRoot {
     OSD {}
     NotificationPopup {}
     CheatsheetOverlay {}
+    SessionScreen {}
+    Settings {}
 }
