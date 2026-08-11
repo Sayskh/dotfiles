@@ -115,25 +115,18 @@ dotfiles/
 
 ## Installation
 
+To apply these dotfiles on an existing NixOS system:
+
 ```bash
-# 1. Mount root and boot partitions
-mount /dev/sda2 /mnt
-mkdir -p /mnt/boot
-mount /dev/sda1 /mnt/boot
+# 1. Clone dotfiles to ~/.config/dotfiles
+git clone https://github.com/Sayskh/dotfiles.git ~/.config/dotfiles
+cd ~/.config/dotfiles
 
-# 2. Generate hardware config & clone dotfiles
-nixos-generate-config --root /mnt
-mkdir -p /mnt/home/hio
-git clone https://github.com/Sayskh/dotfiles.git /mnt/home/hio/dotfiles
-
-# 3. Install NixOS Flake
-cd /mnt/home/hio/dotfiles
-nixos-install --flake .#nixbtw
-
-# 4. Set password and reboot
-passwd hio
-reboot
+# 2. Rebuild system and switch to flake
+sudo nixos-rebuild switch --flake .#nixbtw
 ```
+
+> **Note**: GPU & hypervisor detection is set to `hardwareProfile = "auto"` by default, which automatically configures NVIDIA, AMD, Intel GPUs, or VirtualBox guest environments out-of-the-box.
 
 ---
 
