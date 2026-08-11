@@ -49,8 +49,31 @@ Singleton {
         property int easingType: Easing.OutCubic
     }
 
+    // Transparency math
+    property real wallpaperVibrancy: 0.45
+    property real autoBackgroundTransparency: 0.15
+    property real autoContentTransparency: 0.90
+    property real backgroundTransparency: autoBackgroundTransparency
+    property real contentTransparency: autoContentTransparency
+
+    function getColorFromName(name: string): color {
+        switch (name) {
+            case "primary":            return colors.colPrimary
+            case "secondary":          return colors.colSecondary
+            case "tertiary":           return colors.colTertiary
+            case "primaryContainer":   return colors.colPrimaryContainer
+            case "secondaryContainer": return colors.colSecondaryContainer
+            case "tertiaryContainer":  return colors.colTertiaryContainer
+            case "layer0":             return colors.colLayer0
+            case "layer0Border":       return colors.colLayer0Border
+            case "layer1":             return colors.colLayer1
+            default:                   return colors.colPrimaryContainer
+        }
+    }
+
     property QtObject m3colors: QtObject {
         property bool darkmode: true
+        property bool transparent: false
 
         property color m3background: "#141313"
         property color m3onBackground: "#e6e1e1"
@@ -65,11 +88,19 @@ Singleton {
         property color m3onSurface: "#e6e1e1"
         property color m3surfaceVariant: "#49464a"
         property color m3onSurfaceVariant: "#cbc5ca"
+        property color m3inverseSurface: "#e6e1e1"
+        property color m3inverseOnSurface: "#313030"
+        property color m3outline: "#948f94"
+        property color m3outlineVariant: "#49464a"
+        property color m3shadow: "#000000"
+        property color m3scrim: "#000000"
+        property color m3surfaceTint: "#cbc4cb"
 
         property color m3primary: "#cbc4cb"
         property color m3onPrimary: "#322f34"
         property color m3primaryContainer: "#2d2a2f"
         property color m3onPrimaryContainer: "#bcb6bc"
+        property color m3inversePrimary: "#615d63"
 
         property color m3secondary: "#cac5c8"
         property color m3onSecondary: "#322f32"
@@ -81,15 +112,16 @@ Singleton {
         property color m3tertiaryContainer: "#504348"
         property color m3onTertiaryContainer: "#efdee4"
 
-        property color m3outline: "#948f94"
-        property color m3outlineVariant: "#49464a"
-        property color m3shadow: "#000000"
-        property color m3scrim: "#000000"
+        property color m3error: "#ffb4ab"
+        property color m3onError: "#690005"
+        property color m3errorContainer: "#93000a"
+        property color m3onErrorContainer: "#ffdad6"
     }
 
     property QtObject colors: QtObject {
         property color colSubtext: m3colors.m3outline
         property color colLayer0: m3colors.m3background
+        property color colLayer0Border: m3colors.m3outlineVariant
         property color colOnLayer0: m3colors.m3onBackground
         property color colLayer1: m3colors.m3surfaceContainerLow
         property color colOnLayer1: m3colors.m3onSurfaceVariant
@@ -109,6 +141,11 @@ Singleton {
         property color colOnSecondary: m3colors.m3onSecondary
         property color colSecondaryContainer: m3colors.m3secondaryContainer
         property color colOnSecondaryContainer: m3colors.m3onSecondaryContainer
+
+        property color colTertiary: m3colors.m3tertiary
+        property color colOnTertiary: m3colors.m3onTertiary
+        property color colTertiaryContainer: m3colors.m3tertiaryContainer
+        property color colOnTertiaryContainer: m3colors.m3onTertiaryContainer
     }
 
     // Convenient aliases
