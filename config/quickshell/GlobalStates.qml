@@ -20,12 +20,15 @@ Singleton {
     property bool overviewOpen: false
     property bool regionSelectorOpen: false
     property bool searchOpen: false
+    property bool cheatsheetOpen: false
     property bool screenLocked: false
 
     // Helper to toggle panel states
     function toggleSearch() { searchOpen = !searchOpen; }
+    function toggleCheatsheet() { cheatsheetOpen = !cheatsheetOpen; }
     function toggleSidebarRight() { sidebarRightOpen = !sidebarRightOpen; }
     function toggleSidebarLeft() { sidebarLeftOpen = !sidebarLeftOpen; }
     function toggleMediaControls() { mediaControlsOpen = !mediaControlsOpen; }
     function toggleSettings() { settingsOpen = !settingsOpen; }
 }
+

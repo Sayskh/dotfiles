@@ -10,6 +10,7 @@ import "modules/search"
 import "modules/sidebarRight"
 import "modules/osd"
 import "modules/notifications"
+import "modules/cheatsheet"
 
 ShellRoot {
     id: root
@@ -20,5 +21,7 @@ ShellRoot {
     SidebarRight {}
     OSD {}
     NotificationPopup {}
+    CheatsheetOverlay {}
 }
+
 

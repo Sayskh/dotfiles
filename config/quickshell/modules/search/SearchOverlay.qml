@@ -153,7 +153,44 @@ PanelWindow {
                 QuickAppButton { label: "Neovim"; iconName: "code"; execCmd: "kitty -e nvim" }
             }
 
+            // Keybind Cheatsheet Button
+            MouseArea {
+                implicitWidth: parent.width
+                implicitHeight: 40
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    GlobalStates.searchOpen = false;
+                    GlobalStates.toggleCheatsheet();
+                }
+
+                MaterialShape {
+                    anchors.fill: parent
+                    radius: Appearance.rounding.full
+                    color: Appearance.m3colors.m3primaryContainer
+
+                    RowLayout {
+                        anchors.centerIn: parent
+                        spacing: 8
+
+                        MaterialSymbol {
+                            icon: "keyboard"
+                            size: 18
+                            color: Appearance.m3colors.m3onPrimaryContainer
+                        }
+
+                        Text {
+                            text: "Show Keybindings Cheatsheet"
+                            color: Appearance.m3colors.m3onPrimaryContainer
+                            font.family: Appearance.font.family
+                            font.pixelSize: 13
+                            font.weight: Font.Bold
+                        }
+                    }
+                }
+            }
+
             Item { Layout.fillHeight: true }
+
         }
     }
 }
