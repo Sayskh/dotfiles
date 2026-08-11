@@ -1,46 +1,75 @@
 import QtQuick
+import Quickshell
 
 pragma Singleton
-pragma ComponentBehavior: Bound
 
 Singleton {
     id: root
 
-    // Mix two colors with a ratio (0.0 to 1.0)
-    function mix(color1: color, color2: color, weight: real): color {
-        let w = Math.max(0, Math.min(1, weight));
-        let r = color1.r * (1 - w) + color2.r * w;
-        let g = color1.g * (1 - w) + color2.g * w;
-        let b = color1.b * (1 - w) + color2.b * w;
-        let a = color1.a * (1 - w) + color2.a * w;
-        return Qt.rgba(r, g, b, a);
+    function colorWithHueOf(color1, color2) {
+        var c1 = Qt.color(color1);
+        var c2 = Qt.color(color2);
+        return Qt.hsva(c2.hsvHue, c1.hsvSaturation, c1.hsvValue, c1.a);
     }
 
-    // Adjust opacity
-    function transparentize(col: color, alpha: real): color {
-        return Qt.rgba(col.r, col.g, col.b, alpha);
+    function colorWithSaturationOf(color1, color2) {
+        var c1 = Qt.color(color1);
+        var c2 = Qt.color(color2);
+        return Qt.hsva(c1.hsvHue, c2.hsvSaturation, c1.hsvValue, c1.a);
     }
 
-    // Lighten color
-    function lighten(col: color, factor: real): color {
-        return mix(col, Qt.rgba(1, 1, 1, col.a), factor);
+    function colorWithLightness(color, lightness) {
+        var c = Qt.color(color);
+        return Qt.hsla(c.hslHue, c.hslSaturation, lightness, c.a);
     }
 
-    // Darken color
-    function darken(col: color, factor: real): color {
-        return mix(col, Qt.rgba(0, 0, 0, col.a), factor);
+    function colorWithLightnessOf(color1, color2) {
+        var c2 = Qt.color(color2);
+        return colorWithLightness(color1, c2.hslLightness);
     }
 
-    // Calculate relative luminance for contrast checking
-    function luminance(col: color): real {
-        let a = [col.r, col.g, col.b].map(function (v) {
-            return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-        });
-        return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+    function adaptToAccent(color1, color2) {
+        var c1 = Qt.color(color1);
+        var c2 = Qt.color(color2);
+        return Qt.hsla(c2.hslHue, c2.hslSaturation, c1.hslLightness, c1.a);
     }
 
-    // Returns true if color is dark
-    function isDark(col: color): bool {
-        return luminance(col) < 0.5;
+    function mix(color1, color2, percentage = 0.5) {
+        var c1 = Qt.color(color1);
+        var c2 = Qt.color(color2);
+        return Qt.rgba(percentage * c1.r + (1 - percentage) * c2.r, percentage * c1.g + (1 - percentage) * c2.g, percentage * c1.b + (1 - percentage) * c2.b, percentage * c1.a + (1 - percentage) * c2.a);
+    }
+
+    function transparentize(color, percentage = 1) {
+        var c = Qt.color(color);
+        return Qt.rgba(c.r, c.g, c.b, c.a * (1 - percentage));
+    }
+
+    function applyAlpha(color, alpha) {
+        var c = Qt.color(color);
+        var a = Math.max(0, Math.min(1, alpha));
+        return Qt.rgba(c.r, c.g, c.b, a);
+    }
+
+    function isDark(color) {
+        var c = Qt.color(color);
+        return c.hslLightness < 0.5;
+    }
+
+    function clamp01(x) {
+        return Math.min(1, Math.max(0, x));
+    }
+
+    function solveOverlayColor(baseColor, targetColor, overlayOpacity) {
+        const bc = Qt.color(baseColor);
+        const tc = Qt.color(targetColor);
+        if (overlayOpacity <= 0) return tc;
+        let invA = 1.0 - overlayOpacity;
+
+        let r = (tc.r - bc.r * invA) / overlayOpacity;
+        let g = (tc.g - bc.g * invA) / overlayOpacity;
+        let b = (tc.b - bc.b * invA) / overlayOpacity;
+
+        return Qt.rgba(clamp01(r), clamp01(g), clamp01(b), overlayOpacity);
     }
 }
