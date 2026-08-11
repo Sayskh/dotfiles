@@ -8,7 +8,6 @@
     pulse.enable = true;
     wireplumber.enable = true;
 
-    # PipeWire configuration
     extraConfig.pipewire = {
       "99-audiophile" = {
         "context.properties" = {
@@ -23,11 +22,7 @@
             352800
             384000
           ];
-
-          # Resampler quality (0-14, 10 is highest quality speex/soxr)
           "resample.quality" = 10;
-
-          # Clock quantum for stable, low-jitter processing
           "default.clock.quantum" = 1024;
           "default.clock.min-quantum" = 512;
           "default.clock.max-quantum" = 2048;
@@ -35,7 +30,6 @@
       };
     };
 
-    # WirePlumber Bluetooth Hi-Res Codecs (LDAC, AptX HD, AAC, SBC-XQ)
     wireplumber.extraConfig = {
       "99-bluetooth-codecs" = {
         "wireplumber.settings" = {
@@ -45,6 +39,3 @@
     };
   };
 }
-
-
-

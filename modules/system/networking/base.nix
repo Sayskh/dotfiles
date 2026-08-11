@@ -1,16 +1,12 @@
-# Networking — hostname, NetworkManager, timezone, locale
 {...}: {
   networking = {
     hostName = "nixbtw";
     networkmanager.enable = true;
-    # Disable default firewall (enable later if needed)
     firewall.enable = true;
   };
 
-  # Timezone
   time.timeZone = "Asia/Jakarta";
 
-  # Locale
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {

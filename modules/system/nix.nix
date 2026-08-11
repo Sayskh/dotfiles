@@ -7,7 +7,6 @@
 
       substituters = [
         "https://cache.nixos.org"
-        # CachyOS kernel cache to prevent local kernel compilation
         "https://attic.xuyh0120.win/lantian"
       ];
       trusted-public-keys = [

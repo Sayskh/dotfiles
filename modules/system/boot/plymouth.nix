@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   boot.plymouth.enable = true;
 
-  # Suppress kernel log noise during boot
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
   boot.kernelParams = [
@@ -20,4 +19,3 @@
     timeout = 3;
   };
 }
-

@@ -1,4 +1,3 @@
-# DNS — systemd-resolved with DNS-over-TLS (Cloudflare + Quad9)
 {...}: {
   services.resolved = {
     enable = true;

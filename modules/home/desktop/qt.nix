@@ -1,4 +1,3 @@
-# Qt theming — dark, adwaita style
 {pkgs, ...}: {
   qt = {
     enable = true;
