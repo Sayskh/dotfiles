@@ -10,7 +10,7 @@ A NixOS desktop built on **MangoWC + Quickshell (Material Design 3)** — fully 
 ![MangoWC](https://img.shields.io/badge/MangoWC-scenefx-FF6F00?style=flat)
 ![Quickshell](https://img.shields.io/badge/Quickshell-QML-CBA6F7?style=flat)
 ![Kernel](https://img.shields.io/badge/Kernel-CachyOS_BORE-009688?style=flat)
-![License](https://img.shields.io/badge/License-MIT-A6E3A1?style=flat)
+![License](https://img.shields.io/badge/License-GPL--3.0-A6E3A1?style=flat)
 
 </div>
 
@@ -28,12 +28,12 @@ A NixOS desktop built on **MangoWC + Quickshell (Material Design 3)** — fully 
 | Editor | Neovim (lazy.nvim) |
 | Shell Prompt | Zsh + Oh My Zsh + Starship |
 | File Manager | Yazi + Thunar |
-| GPU Driver | NVIDIA Proprietary + Wayland modesetting |
+| GPU Driver | Auto-Detect (`hardwareProfile = "auto"`) — NVIDIA / AMD / Intel / VirtualBox |
 | Audio | PipeWire (Dynamic sample rate 44.1kHz-384kHz, EasyEffects DSP) |
 | Music | MPD + rmpc / Spotify |
 | Browsers | Zen Browser (default) + Brave |
 | Launcher | Quickshell SearchOverlay |
-| Display Manager | SDDM |
+| Display Manager | SDDM (Astronaut Modern Theme) |
 | Fonts | JetBrainsMono Nerd Font + Material Symbols Rounded |
 
 ---
@@ -78,62 +78,31 @@ dotfiles/
 ├── flake.nix                           Flake inputs and outputs
 ├── flake.lock
 ├── hardware-configuration.nix
+├── LICENSE                             GPL-3.0 License
 ├── modules/
 │   ├── home/                           Home Manager modules
-│   │   ├── browsers/
-│   │   │   └── default.nix             Zen Browser + Brave
-│   │   ├── desktop/
-│   │   │   ├── default.nix             Imports desktop modules
-│   │   │   ├── mangowc.nix             MangoWC autostart script
-│   │   │   ├── gtk.nix                 GTK theme (adw-gtk3-dark)
-│   │   │   ├── qt.nix                  Qt theme (adwaita-dark)
-│   │   │   └── cursor.nix              Bibata cursor + dconf dark mode
-│   │   ├── dev/
-│   │   │   ├── default.nix             Imports dev modules
-│   │   │   ├── git.nix                 Git + Delta diff viewer
-│   │   │   ├── editors.nix             Neovim + LSPs + formatters
-│   │   │   └── tools.nix               jq, tmux, lazygit, btop...
-│   │   ├── media/
-│   │   │   ├── default.nix             Imports media modules
-│   │   │   └── apps.nix                Vesktop, MPV, cava, rmpc, mpc...
-│   │   ├── shell/
-│   │   │   ├── default.nix             Imports shell modules
-│   │   │   ├── zsh.nix                 Zsh + oh-my-zsh + FZF + eza + yazi
-│   │   │   └── starship.nix            Starship prompt
-│   │   ├── packages.nix                General packages (pywal, easyeffects...)
-│   │   └── symlinks.nix                xdg.configFile mkOutOfStoreSymlink wiring
+│   │   ├── browsers/                   Zen Browser + Brave
+│   │   ├── desktop/                    MangoWC, GTK, Qt, Cursor
+│   │   ├── dev/                        Git + Delta, Neovim LSPs, tools
+│   │   ├── media/                      Vesktop, MPV, cava, rmpc, mpc
+│   │   ├── shell/                      Zsh, Oh My Zsh, Starship
+│   │   ├── packages.nix                General user packages
+│   │   └── symlinks.nix                xdg.configFile symlink wiring
 │   │
 │   └── system/                         NixOS system modules
-│       ├── boot/
-│       │   ├── default.nix             Imports boot modules
-│       │   ├── plymouth.nix            Quiet boot + systemd-boot
-│       │   └── kernel.nix              CachyOS BORE kernel
-│       ├── hardware/
-│       │   ├── default.nix             Imports hardware modules
-│       │   ├── gpu.nix                 NVIDIA proprietary + Wayland modesetting
-│       │   └── bluetooth.nix           Bluetooth + Blueman
-│       ├── display/
-│       │   ├── default.nix             Imports display modules
-│       │   ├── mangowc.nix             MangoWC compositor + SDDM session
-│       │   └── portal.nix              XDG Desktop Portal (wlroots + GTK)
-│       ├── networking/
-│       │   ├── default.nix             Imports networking modules
-│       │   ├── base.nix                Hostname nixbtw, NetworkManager, timezone
-│       │   └── dns.nix                 systemd-resolved, DoT (Cloudflare + Quad9)
-│       ├── services/
-│       │   ├── default.nix             Imports services modules
-│       │   ├── audio.nix               PipeWire audiophile rate switching + WirePlumber LDAC
-│       │   ├── display-manager.nix     SDDM
-│       │   ├── media.nix               MPD system service + PipeWire + FIFO
-│       │   └── misc.nix                dbus, gvfs, udisks2, gnome-keyring, dconf
-│       ├── fonts.nix                   JetBrainsMono NF, Material Symbols Rounded, Inter
+│       ├── boot/                       Plymouth + CachyOS kernel
+│       ├── hardware/                   GPU auto-detection & Bluetooth
+│       ├── display/                    MangoWC compositor + SDDM Astronaut
+│       ├── networking/                 NetworkManager + DNS-over-TLS
+│       ├── services/                   PipeWire audiophile + MPD
+│       ├── fonts.nix                   JetBrainsMono NF, M3 Symbols
 │       ├── nix.nix                     GC, optimise, binary caches
 │       ├── packages.nix                System-wide CLI tools
-│       ├── security.nix                rtkit, polkit, PAM, sudo rules
-│       └── users.nix                   User hio, groups, session variables
+│       ├── security.nix                rtkit, polkit, PAM
+│       └── users.nix                   User hio, session variables
 │
 └── config/                             App configs → symlinked into ~/.config/
-    ├── quickshell/                     Material Design 3 QML Desktop Shell
+    ├── quickshell/                     Material Design 3 QML Desktop Shell & Services
     ├── mangowc/                        MangoWC compositor config
     ├── kitty/                          Kitty terminal config
     ├── nvim/                           Neovim init.lua & plugin specs
@@ -156,14 +125,28 @@ mount /dev/sda1 /mnt/boot
 nixos-generate-config --root /mnt
 mkdir -p /mnt/home/hio
 git clone https://github.com/Sayskh/dotfiles.git /mnt/home/hio/dotfiles
-cp /etc/nixos/hardware-configuration.nix /mnt/home/hio/dotfiles/
 
-# 3. Add hardware config to git & install
+# 3. Install NixOS Flake
 cd /mnt/home/hio/dotfiles
-git add hardware-configuration.nix
 nixos-install --flake .#nixbtw
 
 # 4. Set password and reboot
 passwd hio
 reboot
 ```
+
+---
+
+## Acknowledgements & Inspiration
+
+Special thanks to the following open-source projects for design inspiration and references:
+
+- **[end4-pC (IllogicalImpulse)](https://github.com/pctrade/end4-pC)** — Outstanding Material Design 3 QML desktop shell reference, widget design concepts, and dynamic color system.
+- **[MangoWC](https://github.com/DreamMaoMao/mangowc)** — Scenefx-powered Wayland compositor.
+- **[Quickshell](https://git.outfoxxed.me/outfoxxed/quickshell)** — Flexible QML desktop shell framework.
+
+---
+
+## License
+
+This project is licensed under the **GNU General Public License v3.0** (GPL-3.0). See the [`LICENSE`](./LICENSE) file for full details.
