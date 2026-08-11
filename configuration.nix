@@ -18,11 +18,9 @@
     ./modules/system/users.nix
   ];
 
-  # Hardware GPU profile: "auto" (default) | "nvidia" | "amd" | "intel" | "virtualbox" | "generic"
   hardwareProfile = "auto";
 
   nixpkgs.config.allowUnfree = true;
 
-  # State version for NixOS stateful data backwards compatibility
   system.stateVersion = "25.11";
 }

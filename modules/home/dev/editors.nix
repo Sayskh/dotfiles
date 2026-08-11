@@ -6,7 +6,6 @@
     vimAlias = true;
   };
 
-  # System-level dependencies for Neovim LSPs & Treesitter
   home.packages = with pkgs; [
     lua-language-server
     nil
@@ -25,4 +24,3 @@
     gcc
   ];
 }
-

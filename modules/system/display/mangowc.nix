@@ -7,10 +7,8 @@
     inputs.mangowc.packages.${pkgs.system}.default
   ];
 
-
   programs.xwayland.enable = true;
 
-  # Desktop session entry for SDDM display manager
   environment.etc."wayland-sessions/mangowc.desktop".text = ''
     [Desktop Entry]
     Name=MangoWC
@@ -20,4 +18,3 @@
     DesktopNames=MangoWC
   '';
 }
-
