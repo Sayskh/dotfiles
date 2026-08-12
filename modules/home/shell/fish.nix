@@ -1,30 +1,10 @@
 {pkgs, ...}: {
-  programs.zsh = {
+  programs.fish = {
     enable = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    enableCompletion = true;
-
-    history = {
-      size = 10000;
-      save = 10000;
-      ignoreDups = true;
-      ignoreAllDups = true;
-      ignoreSpace = true;
-      share = true;
-    };
-
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-        "command-not-found"
-        "colored-man-pages"
-        "extract"
-        "z"
-      ];
-    };
+    interactiveShellInit = ''
+      set fish_greeting
+      fastfetch
+    '';
 
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles#nixbtw";
@@ -49,16 +29,11 @@
       v = "nvim";
       f = "yazi";
     };
-
-    initExtra = ''
-      eval "$(fzf --zsh)"
-      fastfetch
-    '';
   };
 
   programs.fzf = {
     enable = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
     defaultOptions = [
       "--height 40%"
       "--layout reverse"
@@ -74,18 +49,17 @@
 
   programs.eza = {
     enable = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
     icons = "auto";
   };
 
   programs.yazi = {
     enable = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
   };
 
   programs.zoxide = {
     enable = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
   };
 }
-
