@@ -9,7 +9,7 @@
     wireplumber.enable = true;
 
     extraConfig.pipewire = {
-      "99-audiophile" = {
+      "99-audio-rates" = {
         "context.properties" = {
           "default.clock.rate" = 48000;
           "default.clock.allowed-rates" = [
@@ -31,7 +31,7 @@
     };
 
     wireplumber.extraConfig = {
-      "99-bluetooth-codecs" = {
+      "99-bluetooth" = {
         "wireplumber.settings" = {
           "bluetooth.codecs" = ["ldac" "aptx_hd" "aac" "sbc_xq"];
         };
