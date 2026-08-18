@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, vars, ...}: {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -7,7 +7,7 @@
     '';
 
     shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles#nixbtw";
+      rebuild = "sudo nixos-rebuild switch --flake ~/dotfiles#${vars.hostname}";
       update = "nix flake update ~/dotfiles";
       cleanup = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
 

@@ -1,7 +1,7 @@
-{pkgs, ...}: {
-  users.users.hio = {
+{pkgs, vars, ...}: {
+  users.users.${vars.username} = {
     isNormalUser = true;
-    description = "Hio";
+    description = vars.description;
     extraGroups = [
       "wheel"
       "networkmanager"

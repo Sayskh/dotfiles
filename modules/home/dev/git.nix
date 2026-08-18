@@ -1,7 +1,7 @@
-{...}: {
+{vars, ...}: {
   programs.git = {
     enable = true;
-    userName = "hio";
+    userName = vars.gitUsername;
     extraConfig = {
       init.defaultBranch = "main";
       pull.rebase = true;
@@ -20,5 +20,3 @@
     };
   };
 }
-
-

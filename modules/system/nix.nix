@@ -1,9 +1,9 @@
-{...}: {
+{vars, ...}: {
   nix = {
     settings = {
       experimental-features = ["nix-command" "flakes"];
       auto-optimise-store = true;
-      trusted-users = ["root" "hio"];
+      trusted-users = ["root" vars.username];
 
       substituters = [
         "https://cache.nixos.org"
@@ -22,4 +22,3 @@
     };
   };
 }
-

@@ -1,8 +1,8 @@
-{pkgs, ...}: {
+{pkgs, vars, ...}: {
   services.mpd = {
     enable = true;
-    user = "hio";
-    musicDirectory = "/home/hio/Music";
+    user = vars.username;
+    musicDirectory = "/home/${vars.username}/Music";
     extraConfig = ''
       audio_output {
         type          "pipewire"
@@ -23,5 +23,3 @@
     XDG_RUNTIME_DIR = "/run/user/1000";
   };
 }
-
-

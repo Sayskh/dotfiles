@@ -48,6 +48,7 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
+    vars = import ./vars.nix;
 
     overlay-unstable = final: prev: {
       unstable = import nixpkgs-unstable {
@@ -56,9 +57,9 @@
       };
     };
   in {
-    nixosConfigurations."nixbtw" = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.${vars.hostname} = nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = {inherit inputs;};
+      specialArgs = {inherit inputs vars;};
       modules = [
         {nixpkgs.overlays = [overlay-unstable];}
 
@@ -69,12 +70,11 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = {inherit inputs;};
-            users.hio = import ./home.nix;
+            extraSpecialArgs = {inherit inputs vars;};
+            users.${vars.username} = import ./home.nix;
           };
         }
       ];
     };
   };
 }
-

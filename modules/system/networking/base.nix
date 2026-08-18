@@ -1,6 +1,6 @@
-{...}: {
+{vars, ...}: {
   networking = {
-    hostName = "nixbtw";
+    hostName = vars.hostname;
     networkmanager.enable = true;
     firewall.enable = true;
   };

@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  vars,
   ...
 }: {
   imports = [
@@ -15,11 +16,10 @@
   ];
 
   home = {
-    username = "hio";
-    homeDirectory = "/home/hio";
+    username = vars.username;
+    homeDirectory = "/home/${vars.username}";
     stateVersion = "25.11";
   };
 
   programs.home-manager.enable = true;
 }
-
