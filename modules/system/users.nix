@@ -39,11 +39,11 @@ in {
       LIBVA_DRIVER_NAME = "nvidia";
       WLR_NO_HARDWARE_CURSORS = "1";
     })
-    // (lib.optionalAttrs (gpu == "amd") {
+    // (lib.optionalAttrs (gpu == "amd" || gpu == "hybrid-amd-nvidia") {
       LIBVA_DRIVER_NAME = "radeonsi";
       VDPAU_DRIVER = "radeonsi";
     })
-    // (lib.optionalAttrs (gpu == "intel") {
+    // (lib.optionalAttrs (gpu == "intel" || gpu == "hybrid-intel-nvidia") {
       LIBVA_DRIVER_NAME = "iHD";
     });
 }
