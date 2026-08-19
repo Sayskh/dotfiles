@@ -9,15 +9,15 @@ import "./pages"
 Rectangle {
     id: root
     anchors.centerIn: parent
-    width: 820
-    height: 580
+    width: 860
+    height: 600
     radius: Appearance.rounding.extraLarge
     color: Appearance.colors.surface
     border.color: Appearance.colors.outlineVariant
     border.width: 1
     clip: true
 
-    property string currentTab: "Bar"
+    property string currentTab: "Displays"
 
     RowLayout {
         anchors.fill: parent
@@ -25,7 +25,7 @@ Rectangle {
 
         // ── Left Sidebar Navigation ──
         Rectangle {
-            Layout.preferredWidth: 220
+            Layout.preferredWidth: 230
             Layout.fillHeight: true
             color: Appearance.colors.surfaceContainer
             border.color: Appearance.colors.outlineVariant
@@ -127,6 +127,7 @@ Rectangle {
                                 { id: "Quick", icon: "tune", label: "Quick" },
                                 { id: "General", icon: "widgets", label: "General" },
                                 { id: "Bar", icon: "dock", label: "Bar" },
+                                { id: "Displays", icon: "desktop_windows", label: "Displays" },
                                 { id: "Desktop", icon: "wallpaper", label: "Desktop" },
                                 { id: "Interface", icon: "palette", label: "Interface" },
                                 { id: "Services", icon: "settings_suggest", label: "Services" },
@@ -225,19 +226,29 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
+                    DisplaysConfig {
+                        anchors.fill: parent
+                        visible: root.currentTab === "Displays"
+                    }
+
                     BarConfig {
                         anchors.fill: parent
                         visible: root.currentTab === "Bar"
                     }
 
+                    MangoWCConfig {
+                        anchors.fill: parent
+                        visible: root.currentTab === "MangoWC"
+                    }
+
                     GeneralConfig {
                         anchors.fill: parent
-                        visible: root.currentTab === "General" || root.currentTab === "Quick"
+                        visible: root.currentTab === "General" || root.currentTab === "Quick" || root.currentTab === "Desktop" || root.currentTab === "Interface" || root.currentTab === "Services"
                     }
 
                     AboutConfig {
                         anchors.fill: parent
-                        visible: root.currentTab === "About" || root.currentTab === "MangoWC"
+                        visible: root.currentTab === "About"
                     }
                 }
             }
