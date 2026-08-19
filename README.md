@@ -54,6 +54,7 @@ Edit `vars.nix` to match your desired user configuration:
   hostname = "nixbtw";
   gitUsername = "yourgithub";
   description = "Your Name";
+  gpu = "nvidia"; # Options: "nvidia", "amd", "intel", "vm"
 }
 ```
 

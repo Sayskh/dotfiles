@@ -49,11 +49,28 @@ ColumnLayout {
     }
 
     Text {
-        text: "System Information"
+        text: "Hardware & System Information"
         font.family: Appearance.font.family
         font.pixelSize: 14
         font.weight: Font.Bold
         color: Appearance.colors.primary
+    }
+
+    RowLayout {
+        Text {
+            text: "GPU:"
+            font.family: Appearance.font.family
+            font.pixelSize: 12
+            color: Appearance.colors.onSurfaceVariant
+            Layout.preferredWidth: 100
+        }
+        Text {
+            text: SystemInfo.gpuModel || "Auto-detecting GPU..."
+            font.family: Appearance.font.family
+            font.pixelSize: 12
+            font.weight: Font.Medium
+            color: Appearance.colors.onSurface
+        }
     }
 
     RowLayout {
@@ -65,7 +82,7 @@ ColumnLayout {
             Layout.preferredWidth: 100
         }
         Text {
-            text: SystemInfo.kernelVersion || "Linux CachyOS BORE"
+            text: SystemInfo.kernel || "Linux CachyOS BORE"
             font.family: Appearance.font.family
             font.pixelSize: 12
             font.weight: Font.Medium
