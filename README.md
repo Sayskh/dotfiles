@@ -1,6 +1,6 @@
 # dotfiles
 
-A NixOS desktop built on **MangoWC + Quickshell (Material Design 3)** — fully declarative system config via NixOS Flakes, user config via Home Manager, CachyOS kernel, M3 dynamic wallpaper theming, and an audiophile-grade PipeWire audio pipeline.
+A NixOS desktop built on **MangoWC + Quickshell (Material Design 3)** — fully declarative system config via NixOS Flakes, user config via Home Manager, CachyOS kernel, M3 dynamic wallpaper theming.
 
 > `~/dotfiles/config/` is symlinked to `~/.config/` — all app configs live under `config/` and are wired into place by Home Manager via `xdg.configFile` with `mkOutOfStoreSymlink`.
 
@@ -22,11 +22,11 @@ A NixOS desktop built on **MangoWC + Quickshell (Material Design 3)** — fully 
 | --- | --- |
 | OS | NixOS (nixos-25.11 stable + unstable overlay) |
 | Kernel | CachyOS BORE (LTO + BORE scheduler) |
-| WM | MangoWC (Wayland dwl + scenefx) |
+| WM | MangoWC (Wayland dwl + scenefx + `mmsg` IPC) |
 | Shell / Bar | Quickshell (QML Material Design 3) |
 | Terminal | Kitty |
 | Editor | Neovim (lazy.nvim) |
-| Shell Prompt | Zsh + Oh My Zsh + Starship |
+| Shell Prompt | Fish + Starship |
 | File Manager | Yazi + Thunar |
 | GPU Driver | NVIDIA Proprietary + Wayland modesetting |
 | Audio | PipeWire (Dynamic sample rate 44.1kHz-384kHz, EasyEffects DSP) |
@@ -35,6 +35,38 @@ A NixOS desktop built on **MangoWC + Quickshell (Material Design 3)** — fully 
 | Launcher | Quickshell SearchOverlay |
 | Display Manager | SDDM (Astronaut Modern Theme) |
 | Fonts | JetBrainsMono Nerd Font + Material Symbols Rounded |
+
+---
+
+## Installation
+
+### 1. Clone dotfiles to ~/dotfiles
+```bash
+git clone https://github.com/Sayskh/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+```
+
+### 2. Set your username & hostname in vars.nix
+Edit `vars.nix` to match your desired user configuration:
+```nix
+{
+  username = "yourusername";
+  hostname = "nixbtw";
+  gitUsername = "yourgithub";
+  description = "Your Name";
+}
+```
+
+### 3. Copy hardware-configuration.nix (if fresh install)
+```bash
+cp /etc/nixos/hardware-configuration.nix ~/dotfiles/
+```
+
+### 4. Rebuild system
+```bash
+sudo nixos-rebuild switch --flake ~/dotfiles#nixbtw
+```
+*(Replace `nixbtw` with the hostname you set in `vars.nix`)*
 
 ---
 
@@ -77,6 +109,7 @@ dotfiles/
 ├── home.nix                            Home Manager user config
 ├── flake.nix                           Flake inputs and outputs
 ├── flake.lock
+├── vars.nix                            Central user & hostname variables
 ├── hardware-configuration.nix
 ├── LICENSE                             GPL-3.0 License
 ├── modules/
@@ -85,7 +118,7 @@ dotfiles/
 │   │   ├── desktop/                    MangoWC, GTK, Qt, Cursor
 │   │   ├── dev/                        Git + Delta, Neovim LSPs, tools
 │   │   ├── media/                      Vesktop, MPV, cava, rmpc, mpc
-│   │   ├── shell/                      Zsh, Oh My Zsh, Starship
+│   │   ├── shell/                      Fish, Starship, fastfetch
 │   │   ├── packages.nix                General user packages
 │   │   └── symlinks.nix                xdg.configFile symlink wiring
 │   │
@@ -94,12 +127,12 @@ dotfiles/
 │       ├── hardware/                   NVIDIA proprietary GPU & Bluetooth
 │       ├── display/                    MangoWC compositor + SDDM Astronaut
 │       ├── networking/                 NetworkManager + DNS-over-TLS
-│       ├── services/                   PipeWire audiophile + MPD
+│       ├── services/                   PipeWire audio + MPD
 │       ├── fonts.nix                   JetBrainsMono NF, M3 Symbols
 │       ├── nix.nix                     GC, optimise, binary caches
 │       ├── packages.nix                System-wide CLI tools
 │       ├── security.nix                rtkit, polkit, PAM
-│       └── users.nix                   User hio, session variables
+│       └── users.nix                   User setup, session variables
 │
 └── config/                             App configs → symlinked into ~/.config/
     ├── quickshell/                     Material Design 3 QML Desktop Shell & Services
@@ -113,28 +146,15 @@ dotfiles/
 
 ---
 
-## Installation
-
-To apply these dotfiles on an existing NixOS system:
-
-```bash
-# 1. Clone dotfiles to ~/.config/dotfiles
-git clone https://github.com/Sayskh/dotfiles.git ~/.config/dotfiles
-cd ~/.config/dotfiles
-
-# 2. Rebuild system and switch to flake
-sudo nixos-rebuild switch --flake .#nixbtw
-```
-
----
-
 ## Acknowledgements & Inspiration
 
 Special thanks to the following open-source projects for design inspiration and references:
 
 - **[end4-pC (IllogicalImpulse)](https://github.com/pctrade/end4-pC)** — Outstanding Material Design 3 QML desktop shell reference, widget design concepts, and dynamic color system.
+- **[ekremx25/quickshell](https://github.com/ekremx25/quickshell)** — MangoWC native `mmsg` IPC event streaming & multi-monitor management concepts.
 - **[MangoWC](https://github.com/DreamMaoMao/mangowc)** — Scenefx-powered Wayland compositor.
 - **[Quickshell](https://git.outfoxxed.me/outfoxxed/quickshell)** — Flexible QML desktop shell framework.
+- **[robbsbro69/nixos](https://github.com/robbsbro69/nixos)** — NixOS modular configuration structure references.
 
 ---
 
