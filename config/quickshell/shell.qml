@@ -18,11 +18,14 @@ import "modules/notifications"
 import "modules/cheatsheet"
 import "modules/sessionScreen"
 import "modules/settings"
+import "modules/background"
+import "modules/screenCorners"
 import "services"
 
 ShellRoot {
     id: root
 
+    Background {}
     Bar {}
     Dock {}
     SearchOverlay {}
@@ -37,4 +40,5 @@ ShellRoot {
     CheatsheetOverlay {}
     SessionScreen {}
     Settings {}
+    ScreenCorners {}
 }

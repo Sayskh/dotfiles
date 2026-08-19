@@ -10,10 +10,15 @@ Singleton {
     id: root
 
     property list<var> players: Mpris.players.values
+    property string selectedPlayerIdentity: ""
+
     property var activePlayer: {
         const list = Mpris.players.values;
         if (!list || list.length === 0) return null;
-        // Preferred order: playing player > Spotify > Chrome/Firefox > first player
+        if (root.selectedPlayerIdentity.length > 0) {
+            const selected = list.find(p => p.identity === root.selectedPlayerIdentity);
+            if (selected) return selected;
+        }
         const playing = list.find(p => p.isPlaying);
         if (playing) return playing;
         const spotify = list.find(p => p.identity?.toLowerCase().includes("spotify"));
@@ -21,10 +26,10 @@ Singleton {
         return list[0];
     }
 
-    property string title: activePlayer?.trackTitle ?? "No Media Playing"
-    property string artist: activePlayer?.trackArtist ?? "Unknown Artist"
-    property string album: activePlayer?.trackAlbum ?? ""
-    property string artUrl: activePlayer?.trackArtUrl ?? ""
+    property string title: activePlayer?.trackTitle || "No Media Playing"
+    property string artist: activePlayer?.trackArtist || "Unknown Artist"
+    property string album: activePlayer?.trackAlbum || ""
+    property string artUrl: activePlayer?.trackArtUrl || Images.defaultCoverArt
     property real position: activePlayer?.position ?? 0
     property real length: activePlayer?.length ?? 0
     property real progress: length > 0 ? (position / length) : 0
@@ -39,7 +44,7 @@ Singleton {
 
     Timer {
         id: positionTimer
-        interval: 1000
+        interval: 500
         running: root.isPlaying
         repeat: true
         onTriggered: {
@@ -47,6 +52,10 @@ Singleton {
                 root.position = root.activePlayer.position;
             }
         }
+    }
+
+    function selectPlayer(identity: string) {
+        root.selectedPlayerIdentity = identity;
     }
 
     function togglePlaying() {

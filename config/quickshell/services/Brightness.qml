@@ -15,20 +15,23 @@ Singleton {
     property bool nightLightActive: false
     property int nightLightTemp: 4000
     property real kbdBrightness: 0.5
+    property bool isExternalMonitor: false
 
     signal brightnessChanged()
 
+    // Query brightnessctl first; if failed, check ddcutil for external monitors
     Process {
         id: getProc
-        command: ["sh", "-c", "brightnessctl g; brightnessctl m"]
+        command: ["sh", "-c", "brightnessctl g 2>/dev/null; brightnessctl m 2>/dev/null"]
         stdout: SplitParser {
             splitMarker: "\n"
             onRead: data => {
-                if (data.trim().length > 0) {
+                const trimmed = data.trim();
+                if (trimmed.length > 0) {
                     if (root.rawCurrent === 80) {
-                        root.rawCurrent = parseInt(data.trim()) || 80;
+                        root.rawCurrent = parseInt(trimmed) || 80;
                     } else {
-                        root.rawMax = parseInt(data.trim()) || 100;
+                        root.rawMax = parseInt(trimmed) || 100;
                         if (root.rawMax > 0) {
                             root.brightness = root.rawCurrent / root.rawMax;
                         }
@@ -36,16 +39,45 @@ Singleton {
                 }
             }
         }
+        onExited: {
+            if (root.rawMax <= 0 || isNaN(root.brightness)) {
+                root.isExternalMonitor = true;
+                ddcGetProc.running = true;
+            }
+        }
     }
 
-    Process { id: setProc }
-    Process { id: nightLightProc }
+    // DDC/CI fallback for external desktop monitors
+    Process {
+        id: ddcGetProc
+        command: ["sh", "-c", "ddcutil getvcp 10 --terse 2>/dev/null | awk '{print $4, $5}'"]
+        stdout: SplitParser {
+            splitMarker: "\n"
+            onRead: data => {
+                const parts = data.trim().split(/\s+/);
+                if (parts.length >= 2) {
+                    const cur = parseInt(parts[0]);
+                    const max = parseInt(parts[1]);
+                    if (!isNaN(cur) && !isNaN(max) && max > 0) {
+                        root.rawCurrent = cur;
+                        root.rawMax = max;
+                        root.brightness = cur / max;
+                    }
+                }
+            }
+        }
+    }
 
     function setBrightness(val: real) {
         let clamped = Math.max(0.01, Math.min(1.0, val));
         root.brightness = clamped;
         let percent = Math.floor(clamped * 100);
-        Quickshell.execDetached(["brightnessctl", "s", percent + "%", "--quiet"]);
+
+        if (root.isExternalMonitor) {
+            Quickshell.execDetached(["ddcutil", "setvcp", "10", percent.toString()]);
+        } else {
+            Quickshell.execDetached(["brightnessctl", "s", percent + "%", "--quiet"]);
+        }
         root.brightnessChanged();
     }
 
