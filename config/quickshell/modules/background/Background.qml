@@ -37,7 +37,29 @@ PanelWindow {
         color: "#18000000"
     }
 
-    // Desktop Widgets Area (Top Right)
+    // Desktop Left Side Widgets (Profile, Petal Clock, Weather)
+    ColumnLayout {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: 60
+        anchors.leftMargin: 40
+        spacing: 24
+        visible: Config?.options.desktopWidgets?.enable ?? true
+
+        ProfileWidget {
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        ClockWidget {
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        WeatherWidget {
+            Layout.alignment: Qt.AlignHCenter
+        }
+    }
+
+    // Desktop Right Side Widgets (Media, Calendar)
     ColumnLayout {
         anchors.top: parent.top
         anchors.right: parent.right
@@ -46,12 +68,9 @@ PanelWindow {
         visible: Config?.options.desktopWidgets?.enable ?? true
 
         MediaWidget {
-            id: mediaWidget
             visible: MprisController.isPlaying || MprisController.title !== "No Media Playing"
         }
 
-        CalendarWidget {
-            id: calendarWidget
-        }
+        CalendarWidget {}
     }
 }

@@ -1,94 +1,246 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import "../common"
 import "../common/widgets"
+import "../../services"
+import "./pages"
 
 Rectangle {
+    id: root
     anchors.centerIn: parent
-    width: 640
-    height: 480
+    width: 820
+    height: 580
     radius: Appearance.rounding.extraLarge
-    color: Appearance.m3colors.m3surface
-    border.color: Appearance.m3colors.m3outlineVariant
+    color: Appearance.colors.surface
+    border.color: Appearance.colors.outlineVariant
     border.width: 1
+    clip: true
 
-    ColumnLayout {
+    property string currentTab: "Bar"
+
+    RowLayout {
         anchors.fill: parent
-        anchors.margins: 24
-        spacing: 16
+        spacing: 0
 
-        RowLayout {
-            Layout.fillWidth: true
-
-            Text {
-                text: "Quick Settings & Config"
-                color: Appearance.m3colors.m3onSurface
-                font.family: Appearance.font.family
-                font.pixelSize: 20
-                font.weight: Font.Bold
-            }
-
-            Item { Layout.fillWidth: true }
-
-            MouseArea {
-                implicitWidth: 32
-                implicitHeight: 32
-                cursorShape: Qt.PointingHandCursor
-                onClicked: GlobalStates.settingsOpen = false
-
-                MaterialSymbol {
-                    anchors.centerIn: parent
-                    icon: "close"
-                    size: 20
-                    color: Appearance.m3colors.m3onSurfaceVariant
-                }
-            }
-        }
-
+        // ── Left Sidebar Navigation ──
         Rectangle {
-            Layout.fillWidth: true
-            height: 1
-            color: Appearance.m3colors.m3outlineVariant
-        }
+            Layout.preferredWidth: 220
+            Layout.fillHeight: true
+            color: Appearance.colors.surfaceContainer
+            border.color: Appearance.colors.outlineVariant
+            border.width: 1
 
-        Text {
-            text: "Appearance & Shell Options"
-            color: Appearance.m3colors.m3primary
-            font.family: Appearance.font.family
-            font.pixelSize: 14
-            font.weight: Font.SemiBold
-        }
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 16
+                spacing: 12
 
-        // Transparency Switch
-        RowLayout {
-            Layout.fillWidth: true
-            Text {
-                text: "Enable Panel Transparency"
-                color: Appearance.m3colors.m3onSurface
-                font.family: Appearance.font.family
-                font.pixelSize: 13
-                Layout.fillWidth: true
-            }
-            MouseArea {
-                implicitWidth: 44
-                implicitHeight: 24
-                cursorShape: Qt.PointingHandCursor
-                onClicked: Config.setNestedValue("appearance.transparency.enable", !Config.options.appearance.transparency.enable)
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 12
-                    color: Config.options.appearance.transparency.enable ? Appearance.m3colors.m3primary : Appearance.m3colors.m3surfaceContainerHigh
+                // Profile Card
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 12
+
                     Rectangle {
-                        width: 18; height: 18; radius: 9
-                        anchors.verticalCenter: parent.verticalCenter
-                        x: Config.options.appearance.transparency.enable ? 22 : 4
-                        color: Appearance.m3colors.m3onPrimary
-                        Behavior on x { NumberAnimation { duration: Appearance.animation.fast } }
+                        width: 44
+                        height: 44
+                        radius: 22
+                        color: Appearance.colors.primaryContainer
+                        clip: true
+
+                        Image {
+                            anchors.fill: parent
+                            source: Images.defaultAvatar
+                            fillMode: Image.PreserveAspectCrop
+                            asynchronous: true
+                        }
+                    }
+
+                    ColumnLayout {
+                        spacing: 2
+                        Text {
+                            text: "NixOS User"
+                            font.family: Appearance.font.family
+                            font.pixelSize: 14
+                            font.weight: Font.Bold
+                            color: Appearance.colors.onSurface
+                        }
+                        Text {
+                            text: "MangoWC Desktop"
+                            font.family: Appearance.font.family
+                            font.pixelSize: 11
+                            color: Appearance.colors.onSurfaceVariant
+                        }
+                    }
+                }
+
+                // Config file button
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 36
+                    radius: 18
+                    color: Appearance.colors.surfaceContainerHigh
+                    border.color: Appearance.colors.outlineVariant
+
+                    RowLayout {
+                        anchors.centerIn: parent
+                        spacing: 6
+                        MaterialSymbol {
+                            icon: "edit_note"
+                            iconSize: 16
+                            color: Appearance.colors.primary
+                        }
+                        Text {
+                            text: "Config file"
+                            font.family: Appearance.font.family
+                            font.pixelSize: 12
+                            font.weight: Font.Medium
+                            color: Appearance.colors.onSurface
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: Quickshell.execDetached(["kitty", "-e", "nvim", Config.configFilePath])
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 1
+                    color: Appearance.colors.outlineVariant
+                }
+
+                // Navigation Tabs List
+                ScrollView {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+
+                    ColumnLayout {
+                        width: parent.width
+                        spacing: 4
+
+                        Repeater {
+                            model: [
+                                { id: "Quick", icon: "tune", label: "Quick" },
+                                { id: "General", icon: "widgets", label: "General" },
+                                { id: "Bar", icon: "dock", label: "Bar" },
+                                { id: "Desktop", icon: "wallpaper", label: "Desktop" },
+                                { id: "Interface", icon: "palette", label: "Interface" },
+                                { id: "Services", icon: "settings_suggest", label: "Services" },
+                                { id: "MangoWC", icon: "terminal", label: "MangoWC" },
+                                { id: "About", icon: "info", label: "About" }
+                            ]
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 38
+                                radius: 19
+                                color: root.currentTab === modelData.id ? Appearance.colors.secondaryContainer : "transparent"
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 12
+                                    anchors.rightMargin: 12
+                                    spacing: 12
+
+                                    MaterialSymbol {
+                                        icon: modelData.icon
+                                        iconSize: 18
+                                        color: root.currentTab === modelData.id ? Appearance.colors.onSecondaryContainer : Appearance.colors.onSurfaceVariant
+                                    }
+
+                                    Text {
+                                        text: modelData.label
+                                        font.family: Appearance.font.family
+                                        font.pixelSize: 13
+                                        font.weight: root.currentTab === modelData.id ? Font.Bold : Font.Normal
+                                        color: root.currentTab === modelData.id ? Appearance.colors.onSecondaryContainer : Appearance.colors.onSurface
+                                        Layout.fillWidth: true
+                                    }
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: root.currentTab = modelData.id
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
 
-        Item { Layout.fillHeight: true }
+        // ── Right Main Content Area ──
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            color: "transparent"
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 20
+                spacing: 16
+
+                // Top Header with Close Button
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Text {
+                        text: root.currentTab + " Settings"
+                        font.family: Appearance.font.family
+                        font.pixelSize: 20
+                        font.weight: Font.Bold
+                        color: Appearance.colors.onSurface
+                    }
+
+                    Item { Layout.fillWidth: true }
+
+                    Rectangle {
+                        width: 32
+                        height: 32
+                        radius: 16
+                        color: Appearance.colors.surfaceContainerHighest
+
+                        MaterialSymbol {
+                            anchors.centerIn: parent
+                            icon: "close"
+                            iconSize: 18
+                            color: Appearance.colors.onSurface
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: GlobalStates.settingsOpen = false
+                        }
+                    }
+                }
+
+                // Page Loader / Stack
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    BarConfig {
+                        anchors.fill: parent
+                        visible: root.currentTab === "Bar"
+                    }
+
+                    GeneralConfig {
+                        anchors.fill: parent
+                        visible: root.currentTab === "General" || root.currentTab === "Quick"
+                    }
+
+                    AboutConfig {
+                        anchors.fill: parent
+                        visible: root.currentTab === "About" || root.currentTab === "MangoWC"
+                    }
+                }
+            }
+        }
     }
 }

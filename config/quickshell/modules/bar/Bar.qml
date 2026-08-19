@@ -6,8 +6,11 @@ import "../common"
 PanelWindow {
     id: barWindow
 
+    readonly property bool isBottom: (Config.options.bar?.position ?? "Top") === "Bottom"
+
     anchors {
-        top: true
+        top: !barWindow.isBottom
+        bottom: barWindow.isBottom
         left: true
         right: true
     }
