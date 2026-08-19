@@ -6,10 +6,11 @@
   ...
 }: let
   gpu = vars.gpu or "nvidia";
-  isNvidia = gpu == "nvidia" || gpu == "hybrid-intel-nvidia" || gpu == "hybrid-amd-nvidia";
-  isAmd = gpu == "amd" || gpu == "hybrid-amd-nvidia";
-  isIntel = gpu == "intel" || gpu == "hybrid-intel-nvidia";
-  isHybrid = gpu == "hybrid-intel-nvidia" || gpu == "hybrid-amd-nvidia";
+  isNvidia = lib.hasInfix "nvidia" gpu;
+  isAmd = lib.hasInfix "amd" gpu;
+  isIntel = lib.hasInfix "intel" gpu;
+  isHybrid = lib.hasPrefix "hybrid" gpu;
+  isNvidiaHybrid = isHybrid && isNvidia;
 
   intelBusId = vars.intelBusId or "PCI:0:2:0";
   amdgpuBusId = vars.amdgpuBusId or "PCI:5:0:0";
@@ -55,14 +56,14 @@ in {
     open = false;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
-    powerManagement.enable = isHybrid;
-    powerManagement.finegrained = isHybrid;
+    powerManagement.enable = isNvidiaHybrid;
+    powerManagement.finegrained = isNvidiaHybrid;
 
-    # PRIME Hybrid GPU Configuration (for laptops / multi-GPU)
-    prime = lib.mkIf isHybrid {
+    # PRIME Hybrid GPU Configuration (for laptops / multi-GPU with NVIDIA)
+    prime = lib.mkIf isNvidiaHybrid {
       offload = {
         enable = true;
-        enableOffloadCmd = true; # Provides `nvidia-offload` and `prime-run`
+        enableOffloadCmd = true;
       };
       intelBusId = lib.mkIf isIntel intelBusId;
       amdgpuBusId = lib.mkIf isAmd amdgpuBusId;
@@ -70,16 +71,19 @@ in {
     };
   };
 
-  # AMD Kernel Modules
+  # AMD Kernel Modules in initrd
   boot.initrd.kernelModules = lib.mkIf isAmd ["amdgpu"];
 
-  # Convenience wrapper for PRIME offload
-  environment.systemPackages = lib.optionals isHybrid [
+  # Universal prime-run launcher for all dual-GPU combinations (NVIDIA PRIME & Mesa DRI_PRIME)
+  environment.systemPackages = [
     (pkgs.writeShellScriptBin "prime-run" ''
-      export __NV_PRIME_RENDER_OFFLOAD=1
-      export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
-      export __GLX_VENDOR_LIBRARY_NAME=nvidia
-      export __VK_LAYER_NV_optimus=NVIDIA_only
+      if [ -e /dev/nvidia0 ] || command -v nvidia-smi >/dev/null 2>&1; then
+        export __NV_PRIME_RENDER_OFFLOAD=1
+        export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+        export __GLX_VENDOR_LIBRARY_NAME=nvidia
+        export __VK_LAYER_NV_optimus=NVIDIA_only
+      fi
+      export DRI_PRIME=1
       exec "$@"
     '')
   ];
