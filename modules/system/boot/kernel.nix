@@ -8,4 +8,13 @@
     inputs.nix-cachyos-kernel.legacyPackages.${pkgs.system}.linuxPackages-cachyos-bore-lto;
 
   boot.blacklistedKernelModules = ["nouveau"];
+
+  boot.kernelParams = [
+    "usbhid.mousepoll=1"
+    "usbhid.kbpoll=1"
+    "threadirqs"
+    "preempt=full"
+    "split_lock_detect=off"
+    "tsc=reliable"
+  ];
 }
