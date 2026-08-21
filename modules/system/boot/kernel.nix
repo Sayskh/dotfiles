@@ -10,8 +10,8 @@
   boot.blacklistedKernelModules = ["nouveau"];
 
   boot.kernelParams = [
-    "usbhid.mousepoll=1"
-    "usbhid.kbpoll=1"
+    "usbhid.mousepoll=0"
+    "usbhid.kbpoll=0"
     "threadirqs"
     "preempt=full"
     "split_lock_detect=off"

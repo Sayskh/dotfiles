@@ -78,29 +78,6 @@ sudo nixos-rebuild switch --flake ~/dotfiles#nixbtw
 
 ---
 
-## Hardware & Latency Tuning
-
-This dotfiles ships with **ultra-low-latency hardware configuration out of the box**, no extra tuning required.
-
-| Metric | Windows Default | This Dotfiles |
-| --- | --- | --- |
-| Audio Latency (round-trip) | ~30–50ms (WASAPI) | ~5.3ms (PipeWire quantum 256) |
-| USB Mouse Polling | 125Hz (8ms) | 1000Hz (1ms) |
-| USB Keyboard Polling | 125Hz (8ms) | 1000Hz (1ms) |
-| Keyboard Repeat Delay | 500ms | 200ms |
-| Mouse Acceleration | Enabled | Disabled (flat 1:1 raw) |
-| Kernel Preemption | None (NT) | Full (CachyOS BORE) |
-| IRQ Threading | No | Yes |
-| Network QDisc | pfifo_fast | CAKE + BBR |
-
-**Key features:**
-- PipeWire with hi-res rates up to 384kHz and SoX ultra-quality resampling
-- Bluetooth LDAC / aptX HD / aptX Low Latency with fast-connect tuning
-- Performance CPU governor with RAM-first swap policy
-- Threaded IRQs and full kernel preemption for stutter-free gaming
-
----
-
 ## Flake Inputs
 
 
